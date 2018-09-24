@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    
+    
+</head>
+<body>  
+    <div class="container-fluid">
+      <div class="row">
+        <div class="container">
+            <div class="col-md-4">
+                <h2>Login</h2>
+            </div>
+            <div class="row">
+                  <form>
+                    <div class="col-md-8">
+                      <label for="usrname">Username</label>
+                      <input type="text" id="usuario" name="usuario" required>
+                    
+                      <label for="psw">Password</label>
+                      <input type="password" id="password" name="password" required>
+                      <!-- metele le meto el diseño de la clse BLUE del CSS-->
+                      <div class="col-md-4">
+                          <span onclick="login()"><p class="blue">Iniciar sesión</p> </span> 
+                      </div>
+                    </div>
+                  </form>
+              </div>
+          </div>
+                
+      </div>  <!-- fin fila (ROW) -->	
+    </div> <!-- fin Container -->
+
+      <script>
+        function login(){
+
+            var usuario = $('#usuario').val();  // jquery
+            var password = $('#password').val();
+            var myJson = '{"user":"'+usuario+'","pass":"'+password+'" }'; // el '+' es para concatenar la variable
+            console.log(myJson);
+             // Llamada AJAX
+        var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              if ( this.responseText == "valido" ) {    // si todo ha ido bien ejecuta la función ()
+                console.log(this.responseText);
+                document.location.href='/admin';
+              } else {
+                console.error('Error al hacer login!');
+              }
+            }
+          };
+        xhttp.open("POST", "http://localhost:3000/login", true); // POST, estamos enviando el json al \login del fichero index.js...
+        xhttp.setRequestHeader("Content-type", "application/json"); // Tipo de cabezera json....
+        xhttp.send(myJson);
+        }
+          
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web principal</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script> 
+</head>
+<body>
+    <h2>Bienvenido a la web de recursos online.</h2>
+    <h5>Realizada en ExpressJS y jQuery</h5>
+    <nav class="navbar navbar-default">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="">Selecciona donde quieres ir</a>
+              </div>
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="principal.html">Inicio</a></li>
+                <li class="active"><a href="login()">Logearse</a></li>
+              </ul>
+            </div>
+    </nav>
+
+    <script>
+            function login(){
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                    if ( this.responseText == "valido" ) {    // si todo ha ido bien ejecuta la función ()
+                        console.log(this.responseText);
+                        document.location.href='/login';
+                    } else {
+                        console.error('Error al hacer login!');
+                    }
+                    }
+                };
+                   
+                xhttp.open("POST", "http://localhost:3000/login", true); 
+                xhttp.setRequestHeader('Content-Type','text/plain'); // Tipo de cabezera texto....
+            }
+
+
+            function principal(){
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                    if ( this.responseText == "valido" ) {    // si todo ha ido bien ejecuta la función ()
+                        console.log(this.responseText);
+                        document.location.href='/principal';
+                    } else {
+                        console.error('Error al hacer login!');
+                    }
+                    }
+                };
+                   
+                xhttp.open("POST", "http://localhost:3000/principal", true); 
+                xhttp.setRequestHeader('Content-Type','text/plain'); // Tipo de cabezera texto....
+            }
+    </script>
+</body>
+</html>

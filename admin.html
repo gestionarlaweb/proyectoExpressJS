@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web administrador</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>   
+</head>
+<body>
+    <h2>Zona de administrador</h2>
+    <div class="col-md-8">
+        <fieldset id="basic-forms-p-1" role="tabpanel" aria-labelledby="basic-forms-h-1" class="body current" aria-hidden="false" style="left: 0px;">
+            <form>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label for="name-2" class="block">Nombre enlace *</label>
+                    </div>
+                    <div class="col-sm-12">
+                        <input id="id_nombre" name="nombre" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label for="surname-2" class="block">Dirección web enlace *</label>
+                    </div>
+                    <div class="col-sm-12">
+                        <input id="id_enlace" name="enlace" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        Categoría
+                    </div>
+                    <div class="col-sm-12">
+                        <select id="id_categoria" class="form-control required fill">
+                                <option>CSS3-Bootstrap</option>
+                                <option>HMTL5</option>
+                                <option>PHP</option>
+                                <option>JavaScript</option>
+                                <option>NodeJS - Angular</option>
+                                <option>Otros</option>
+                        </select>
+                    </div>
+                </div>
+                <span onclick="guardarBBDD()" ><p class="blue">Guardar en BBDD</p></span>
+            </form>         
+        </fieldset>
+    </div>
+
+    <script>
+        function guardarBBDD(){
+            var nombre = $('#id_nombre').val();  // jquery
+            var direccion = $('#id_enlace').val();
+            var categoria = $('#id_categoria').val();
+            var myJson = '{"nombre":"'+nombre+'","direccion":"'+direccion+'", "categoria":"'+categoria+'" }'; // el '+' es para concatenar la variable
+            console.log(myJson);
+             // Llamada AJAX
+        var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              if ( this.responseText == "valido" ) {    // si todo ha ido bien ejecuta la función ()
+                console.log(this.responseText);
+                document.location.href='/admin';
+              } else {
+                console.error('Error al hacer login!');
+              }
+            }
+          };
+        xhttp.open("POST", "http://localhost:3000/admin", true); // POST, estamos enviando el json al \admin del fichero index.js...
+        xhttp.setRequestHeader("Content-type", "application/json"); // Tipo de cabezera json....
+        xhttp.send(myJson);
+        }
+    </script>
+          
+  
+</body>
+</html>
