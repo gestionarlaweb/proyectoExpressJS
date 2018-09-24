@@ -67,18 +67,11 @@ app.post('/admin', function(entrada, respuesta){   // POST petición
     MongoClient.connect(_mongoBBDD,  // url
         function (err, client) {   // callback predefinido
             var tablaMongo = client.db('local').collection('urls');  // este 'local' se refiere al local de la base de datos de la tabla usuarios
-            tablaMongo.insert({nombre : entrada.body.nombre}).toArray(function(error, doc){ // buscame en el campo nombre la entrada del input
+            tablaMongo.insert({nombre : entrada.body.nombre, direccion : entrada.body.direccion,categoria : entrada.body.categoria}).toArray(function(error, doc){ // buscame en el campo nombre la entrada del input
                 // aquí tengo la información en json que es la respuesta del 'doc' -> 'doc' es la respuesta del mongo
                 console.log(doc);
             }) 
-            tablaMongo.insert({direccion : entrada.body.direccion}).toArray(function(error, doc){ // buscame en el campo nombre la entrada del input
-                // aquí tengo la información en json que es la respuesta del 'doc' -> 'doc' es la respuesta del mongo
-                console.log(doc);
-            })
-            tablaMongo.insert({categoria : entrada.body.categoria}).toArray(function(error, doc){ // buscame en el campo nombre la entrada del input
-                // aquí tengo la información en json que es la respuesta del 'doc' -> 'doc' es la respuesta del mongo
-                console.log(doc);
-            })
+            
             client.close(); // Cierro la conexión
         } 
     
