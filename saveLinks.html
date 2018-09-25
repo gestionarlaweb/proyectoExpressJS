@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Web administrador</title>
+    <title>Web Links</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>   
 </head>
 <body>
-    <h2>Zona de administrador</h2>
+    <h2>Enviar nuevo Link</h2>
     <div class="col-md-8">
         <fieldset id="basic-forms-p-1" role="tabpanel" aria-labelledby="basic-forms-h-1" class="body current" aria-hidden="false" style="left: 0px;">
             <form>
@@ -45,6 +45,14 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label for="surname-2" class="block">Descriopción</label>
+                    </div>
+                    <div class="col-sm-12">
+                        <input id="id_descripcion" name="descripcion" type="text" class="form-control">
+                    </div>
+                </div>
                 <span onclick="guardarBBDD()" ><p class="blue">Guardar en BBDD</p></span>
             </form>         
         </fieldset>
@@ -55,23 +63,33 @@
             var nombre = $('#id_nombre').val();  // jquery
             var direccion = $('#id_enlace').val();
             var categoria = $('#id_categoria').val();
-            var myJson = '{"nombre":"'+nombre+'","direccion":"'+direccion+'", "categoria":"'+categoria+'" }'; // el '+' es para concatenar la variable
-            console.log(myJson);
+            var descripcion = $('#id_descripcion').val();
+            // Creamos variable String con una cadena de texto
+            // el '+' es para concatenar la variable
+            var myCadenaTexto = '{"nombre":"'+nombre+'","direccion":"'+direccion+'", "categoria":"'+categoria+'", "descripcion":"'+descripcion+'" }'; 
+            
+            
+            console.log(myCadenaTexto);
+
              // Llamada AJAX
         var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
+              // Validamos las respuestas de servidor a nivel de protocolo http
             if (this.readyState == 4 && this.status == 200) {
-              if ( this.responseText == "valido" ) {    // si todo ha ido bien ejecuta la función ()
+                // validamos que existe una respuesta 'string'
+              if ( this.responseText == "valido" ) {    
                 console.log(this.responseText);
-                document.location.href='/admin';
+                document.location.href='/saveLinks';
               } else {
                 console.error('Error al hacer login!');
               }
             }
           };
-        xhttp.open("POST", "http://localhost:3000/admin", true); // POST, estamos enviando el json al \admin del fichero index.js...
+          // Configuramos el endpoint al que queremos enviar los datos, como hemos definido en Express y es de tipo POST
+        xhttp.open("POST", "http://localhost:3000/saveLinks", true); 
         xhttp.setRequestHeader("Content-type", "application/json"); // Tipo de cabezera json....
-        xhttp.send(myJson);
+        // Enviamos la cadena de texto en formato Json
+        xhttp.send(myCadenaTexto);
         }
     </script>
           

@@ -50,32 +50,52 @@ app.post('/login', function(entrada, respuesta){   // POST petición
     
     )
     if(entrada.body.user == "david" && entrada.body.pass == "David1234"){     // body es un objeto dentro de entrada
-        console.log("password correcto, te redirecciono a admin.html");
+        console.log("password correcto, te redirecciono a saveLinks.html");
         respuesta.send("valido");      
       }else{
         console.log("usuario o password no correcto !!!");
       }
-    console.log('Si es correcto debería entrar aquí y redirigir a admin.html !');
+    console.log('Si es correcto debería entrar aquí y redirigir a SaveLinks.html !');
     
 });
-// insertaré usuario
-// tablaMongo.insert({nombre : entrada.body.user}).toArray(function(error, doc)
-app.post('/admin', function(entrada, respuesta){   // POST petición
-    // Aquí devuelvo una web, no es el proposito de ExpressJs el devolver páginas web
-    console.log(entrada.body); // Se refiere al cuerpo de la petición de lo que nosotros le estamos enviando por POST
 
-    MongoClient.connect(_mongoBBDD,  // url
-        function (err, client) {   // callback predefinido
-            var tablaMongo = client.db('local').collection('urls');  // este 'local' se refiere al local de la base de datos de la tabla usuarios
-            tablaMongo.insert({nombre : entrada.body.nombre, direccion : entrada.body.direccion,categoria : entrada.body.categoria}).toArray(function(error, doc){ // buscame en el campo nombre la entrada del input
-                // aquí tengo la información en json que es la respuesta del 'doc' -> 'doc' es la respuesta del mongo
-                console.log(doc);
-            }) 
-            
-            client.close(); // Cierro la conexión
-        } 
+
+
+
+
+// insertar usuario
+// tablaMongo.insert({nombre : entrada.body.user}).toArray(function(error, doc)
+app.post('/saveLinks', function(entrada, respuesta){   // POST petición
+    // Aquí devuelvo una web, no es el proposito de ExpressJs el devolver páginas web
+    console.log("Entro en saveLinks.html"); // Se refiere al cuerpo de la petición de lo que nosotros le estamos enviando por POST
     
-    )    
+    // 'entrada.body' ya es un Json porque lo configuramos inicialmente con       app.use(bodyParser.json());
+    console.log(entrada.body);
+
+    if (entrada.body.nombre === undefined || entrada.body.direccion == undefined || entrada.body.categoria == undefined){
+        // Si falta rellenar algún campo en el formulario execpto la descripción que no es necesaria
+        return;
+    }else{
+        // Si todo esta bién !!!
+        MongoClient.connect(_mongoBBDD,  // url
+            function (err, client) {   // callback predefinido
+                var _collection = client.db('local').collection('mis_enlaces_guardados');  // este 'local' se refiere al local de la base de datos de la tabla usuarios
+                _collection.insert(entrada.body, (function(errors, doc){ 
+                    if (!errors){
+                        // Si no hay errores
+                        respuesta.json(doc)
+                    }else{
+                        // En caso de errores
+                        respuesta.json('{error: "Algo salió mal"}');
+                    }
+                })); 
+                
+                client.close(); // Cierro la conexión
+            } 
+        
+        ) 
+    }
+               
 });
 
 // actualizar
@@ -84,9 +104,9 @@ app.post('/admin', function(entrada, respuesta){   // POST petición
 // eliminar
 // tablaMongo.delete({nombre : entrada.body.user}).toArray(function(error, doc)
 
-app.get('/admin', function(entrada, respuesta){
+app.get('/saveLinks', function(entrada, respuesta){
     // Aquí devuelvo una web, no es el proposito de ExpressJs el devolver páginas web
-    respuesta.sendFile(__dirname + '/admin.html'); // __dirname te dice la ruta del Servidor y así no debes escribirla
+    respuesta.sendFile(__dirname + '/saveLinks.html'); // __dirname te dice la ruta del Servidor y así no debes escribirla
 });
 
 app.get('/principal', function(entrada, respuesta){

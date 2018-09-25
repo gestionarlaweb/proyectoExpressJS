@@ -53,7 +53,7 @@
             if (this.readyState == 4 && this.status == 200) {
               if ( this.responseText == "valido" ) {    // si todo ha ido bien ejecuta la función ()
                 console.log(this.responseText);
-                document.location.href='/admin';
+                document.location.href='/saveLinks';
               } else {
                 console.error('Error al hacer login!');
               }
