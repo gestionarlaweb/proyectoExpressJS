@@ -17,47 +17,25 @@
                 <a class="navbar-brand" href="">Selecciona donde quieres ir</a>
               </div>
               <ul class="nav navbar-nav">
-                <li class="active"><a href="principal.html">Inicio</a></li>
-                <li class="active"><a href="login()">Logearse</a></li>
+                <li class="active"><a onclick="principal()">Inicio</a></li>
+                <li class="active"><span onclick="login()">Logearse</span></li> <!-- se refiere a la fucion línea 27-->
               </ul>
             </div>
     </nav>
 
     <script>
             function login(){
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                    if ( this.responseText == "valido" ) {    // si todo ha ido bien ejecuta la función ()
-                        console.log(this.responseText);
-                        document.location.href='/login';
-                    } else {
-                        console.error('Error al hacer login!');
-                    }
-                    }
+                    console.log("he entrado en login");
+                    document.location.href='/login';
                 };
-                   
-                xhttp.open("POST", "http://localhost:3000/login", true); 
-                xhttp.setRequestHeader('Content-Type','text/plain'); // Tipo de cabezera texto....
-            }
+              
 
 
             function principal(){
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                    if ( this.responseText == "valido" ) {    // si todo ha ido bien ejecuta la función ()
-                        console.log(this.responseText);
-                        document.location.href='/principal';
-                    } else {
-                        console.error('Error al hacer login!');
-                    }
-                    }
+                    console.log("he entrado en principal");
+                    document.location.href='/principal';
                 };
-                   
-                xhttp.open("POST", "http://localhost:3000/principal", true); 
-                xhttp.setRequestHeader('Content-Type','text/plain'); // Tipo de cabezera texto....
-            }
+         
     </script>
 </body>
 </html>

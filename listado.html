@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web principal</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script> 
+</head>
+<body>
+    <h2>Bienvenido a la web de recursos online.</h2>
+    <h5>Realizada en ExpressJS y jQuery</h5>
+    
+    <ul id="lista_url">
+    </ul>
+    <span onclick="recuperar_url()">Ver enlaces</span>
+
+    <script>
+         function recuperar_url(){
+                console.log("he entrado");  
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {        
+                if (this.readyState == 4 && this.status == 200) { 
+                    if(this.responseText){
+                        console.log(this.responseText);
+                        for(var var_enlace in this.responseText){   
+                            console.log(var_enlace);
+                            $('#lista_url').append('<li>'+ this.responseText[var_enlace] + '</li>');                    
+                        }
+                    
+                    }      
+                }
+            };
+          
+            xhttp.open("GET", "http://localhost:3000/dame_enlaces", true); // va a llamar a: app.get('/dame_enlaces', function(entrada, respuesta)
+            xhttp.send();
+         }
+    </script>
+</body>
+</html>

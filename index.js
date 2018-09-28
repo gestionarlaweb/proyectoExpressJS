@@ -42,28 +42,36 @@ app.post('/login', function(entrada, respuesta){   // POST petición
             tablaMongo.find({nombre : entrada.body.user}).toArray(function(error, doc){ // buscame en el campo nombre la entrada del input
                 // aquí tengo la información en json que es la respuesta del 'doc' -> 'doc' es la respuesta del mongo
                 console.log(doc);
+                console.log(doc.length);
 
-                // Validar aqui dentro si es usuario y password correcto
+                if(doc.length == 0){    
+                    // si el tamañano es 0 no tiene elementos
+                    respuesta.send('erroneo');
+                    
+                } else if (doc.length == 1) {
+                    // Se ha encontrado usuario
+               
+                    if (doc[0].password == entrada.body.pass){  // normalmente se comprueba el email (atributo de la bbdd)
+                        console.log("esto es un IF");
+                        respuesta.send('valido'); // Le envia la respuesta 'valido' al login.htmml (línea 54)
+                        
+                    }else{
+                        console.log("esto es un ELSE");
+                        respuesta.send('erroneo');
+                    }
+                }
             }) 
             client.close(); // Cierro la conexión
         } 
     
     )
-    if(entrada.body.user == "david" && entrada.body.pass == "David1234"){     // body es un objeto dentro de entrada
-        console.log("password correcto, te redirecciono a saveLinks.html");
-        respuesta.send("valido");      
-      }else{
-        console.log("usuario o password no correcto !!!");
-      }
-    console.log('Si es correcto debería entrar aquí y redirigir a SaveLinks.html !');
+    
     
 });
 
 
 
-
-
-// insertar usuario
+// insertar link a la BBDD
 // tablaMongo.insert({nombre : entrada.body.user}).toArray(function(error, doc)
 app.post('/saveLinks', function(entrada, respuesta){   // POST petición
     // Aquí devuelvo una web, no es el proposito de ExpressJs el devolver páginas web
@@ -80,13 +88,14 @@ app.post('/saveLinks', function(entrada, respuesta){   // POST petición
         MongoClient.connect(_mongoBBDD,  // url
             function (err, client) {   // callback predefinido
                 var _collection = client.db('local').collection('mis_enlaces_guardados');  // este 'local' se refiere al local de la base de datos de la tabla usuarios
-                _collection.insert(entrada.body, (function(errors, doc){ 
+                _collection.insertOne(entrada.body, (function(errors, doc){ 
                     if (!errors){
                         // Si no hay errores
-                        respuesta.json(doc)
+                        console.log('--------************ ->>>>> '+'Este es el DOC : ',doc); 
+                        respuesta.send('valido');
                     }else{
                         // En caso de errores
-                        respuesta.json('{error: "Algo salió mal"}');
+                        respuesta.json('{error_envío: "Algo salió mal"}');
                     }
                 })); 
                 
@@ -98,8 +107,37 @@ app.post('/saveLinks', function(entrada, respuesta){   // POST petición
                
 });
 
+// Listar 
+app.get('/dame_enlaces', function(entrada, respuesta){
+    MongoClient.connect(_mongoBBDD,  
+        function (err, client) {   
+            var tablaMongo = client.db('local').collection('mis_enlaces_guardados');  
+            
+            tablaMongo.find({}).toArray(function(error_desde_mongo, respuesta_desde_mongo){ 
+               
+                if(!error_desde_mongo){
+                    // respuesta.json(respuesta_desde_mongo);
+                    respuesta.send(JSON.stringify(respuesta_desde_mongo)); // forzamos el JSON
+                }else{
+                  console.log("error de servidor !");  
+                }
+                
+            }) 
+            client.close(); // Cierro la conexión
+        } 
+    
+    )
+    
+})
+app.get('/listado', function(entrada, respuesta){
+    // Aquí devuelvo una web, no es el proposito de ExpressJs el devolver páginas web
+    respuesta.sendFile(__dirname + '/listado.html'); // __dirname te dice la ruta del Servidor y así no debes escribirla
+});
+
+
 // actualizar
 // tablaMongo.update({nombre : entrada.body.user}).toArray(function(error, doc)
+
 
 // eliminar
 // tablaMongo.delete({nombre : entrada.body.user}).toArray(function(error, doc)
@@ -113,6 +151,11 @@ app.get('/principal', function(entrada, respuesta){
     // Aquí devuelvo una web, no es el proposito de ExpressJs el devolver páginas web
     respuesta.sendFile(__dirname + '/principal.html'); // __dirname te dice la ruta del Servidor y así no debes escribirla
 });
+
+
+
+
+
 
 app.listen(puerto, host, ()=>{
 
